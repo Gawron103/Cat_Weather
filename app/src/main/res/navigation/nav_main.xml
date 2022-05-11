@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/authHostFragment">
+
+    <fragment
+        android:id="@+id/authHostFragment"
+        android:name="com.example.cat_weather.views.AuthHostFragment"
+        android:label="fragment_auth_host"
+        tools:layout="@layout/fragment_auth_host" >
+        <action
+            android:id="@+id/action_authHostFragment_to_homeHostFragment"
+            app:destination="@id/homeHostFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeHostFragment"
+        android:name="com.example.cat_weather.views.HomeHostFragment"
+        android:label="fragment_home_host"
+        tools:layout="@layout/fragment_home_host" />
+</navigation>
