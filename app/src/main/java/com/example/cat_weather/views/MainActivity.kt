@@ -1,8 +1,11 @@
-package com.example.cat_weather
+package com.example.cat_weather.views
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.cat_weather.R
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

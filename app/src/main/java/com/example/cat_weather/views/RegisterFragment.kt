@@ -10,7 +10,7 @@ import com.example.cat_weather.databinding.FragmentRegisterBinding
 class RegisterFragment : Fragment() {
 
     private var _binding: FragmentRegisterBinding? = null
-    private val binding: FragmentRegisterBinding get() = _binding
+    private val binding: FragmentRegisterBinding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
