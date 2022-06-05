@@ -1,4 +1,4 @@
-package com.example.cat_weather.models
+package com.example.cat_weather.models.weathermodel
 
 data class Sys(
     val country: String,

@@ -6,8 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import com.example.cat_weather.api.OpenWeatherStatus
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.cat_weather.apis.ApiStatus
 import com.example.cat_weather.databinding.FragmentWeatherViewBinding
+import com.example.cat_weather.views.adapters.WeatherAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -19,6 +22,8 @@ class WeatherView : Fragment() {
 
     private val viewModel by viewModels<WeatherViewModel>()
 
+    private lateinit var weatherAdapter: WeatherAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -29,24 +34,53 @@ class WeatherView : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.getWeatherForCity("Szczecin")
-        observeWeatherData()
+        val cities = getSavedCitiesFromFirebase()
+        viewModel.requestFullWeatherForCities(cities)
+        setupRecyclerView()
+        observeFullDataResponse()
     }
 
-    private fun observeWeatherData() {
-        viewModel.weatherData.observe(viewLifecycleOwner, { response ->
-            when (response.statusOpen) {
-                OpenWeatherStatus.Success -> {
+    private fun observeFullDataResponse() {
+        viewModel.citiesWeatherData.observe(viewLifecycleOwner, { response ->
+            when (response.status) {
+                ApiStatus.Success -> {
                     Timber.d(response.data.toString())
+                    response.data?.let {
+                        weatherAdapter.setCities(it)
+                    }
+                    showLoading(false)
                 }
-                OpenWeatherStatus.Error -> {
+                ApiStatus.Error -> {
+                    showLoading(false)
                     Timber.e(response.message)
                 }
-                OpenWeatherStatus.Loading -> {
+                ApiStatus.Loading -> {
+                    showLoading(true)
                     Timber.d("View should show loading")
                 }
             }
         })
     }
+
+    private fun setupRecyclerView() {
+        weatherAdapter = WeatherAdapter()
+
+        binding.rvWeatherRecycler.apply {
+            layoutManager = LinearLayoutManager(
+                requireContext(), RecyclerView.HORIZONTAL, false
+            )
+            adapter = weatherAdapter
+        }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.pbWeatherLoading.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun getSavedCitiesFromFirebase(): List<String> {
+        return listOf("Szczecin", "Berlin", "Amsterdam")
+    }
+
+
 
 }

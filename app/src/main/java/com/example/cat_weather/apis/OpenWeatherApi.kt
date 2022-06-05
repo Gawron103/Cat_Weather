@@ -1,4 +1,4 @@
-package com.example.cat_weather.apis.openweatherapi
+package com.example.cat_weather.apis
 
 import com.example.cat_weather.models.weathermodel.OpenWeatherCurrentWeatherModel
 import retrofit2.Response

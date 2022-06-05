@@ -1,6 +1,7 @@
 package com.example.cat_weather.di
 
-import com.example.cat_weather.api.OpenWeatherApi
+import com.example.cat_weather.apis.OpenWeatherApi
+import com.example.cat_weather.apis.UnsplashApi
 import com.example.cat_weather.repositories.WeatherRepository
 import com.example.cat_weather.repositories.WeatherRepositoryImpl
 import dagger.Module
@@ -14,9 +15,10 @@ object RepositoryModule {
 
     @Provides
     fun provideWeatherRepository(
-        openWeatherApi: OpenWeatherApi
+        openWeatherApi: OpenWeatherApi,
+        unsplashApi: UnsplashApi
     ): WeatherRepository {
-        return WeatherRepositoryImpl(openWeatherApi)
+        return WeatherRepositoryImpl(openWeatherApi, unsplashApi)
     }
 
 }
