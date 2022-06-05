@@ -1,6 +1,6 @@
-package com.example.cat_weather.api
+package com.example.cat_weather.apis.openweatherapi
 
-import com.example.cat_weather.models.OpenWeatherCurrentWeatherModel
+import com.example.cat_weather.models.weathermodel.OpenWeatherCurrentWeatherModel
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
