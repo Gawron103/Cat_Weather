@@ -8,11 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cat_weather.apis.ApiStatus
 import com.example.cat_weather.databinding.FragmentWeatherViewBinding
 import com.example.cat_weather.views.adapters.WeatherAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class WeatherView : Fragment() {
@@ -35,30 +33,28 @@ class WeatherView : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val cities = getSavedCitiesFromFirebase()
-        viewModel.requestFullWeatherForCities(cities)
+        viewModel.getWeatherAndImageForCities(cities)
         setupRecyclerView()
-        observeFullDataResponse()
+        observeWeatherData()
     }
 
-    private fun observeFullDataResponse() {
-        viewModel.citiesWeatherData.observe(viewLifecycleOwner, { response ->
-            when (response.status) {
-                ApiStatus.Success -> {
-                    Timber.d(response.data.toString())
-                    response.data?.let {
-                        weatherAdapter.setCities(it)
-                    }
-                    showLoading(false)
-                }
-                ApiStatus.Error -> {
-                    showLoading(false)
-                    Timber.e(response.message)
-                }
-                ApiStatus.Loading -> {
-                    showLoading(true)
-                    Timber.d("View should show loading")
-                }
+    private fun observeWeatherData() {
+        viewModel.citiesLoadingLiveData.observe(viewLifecycleOwner, { isLoading ->
+            if (isLoading) {
+                showLoading(true)
+            } else {
+                showLoading(false)
             }
+        })
+
+        viewModel.citiesDataLiveData.observe(viewLifecycleOwner, { cities ->
+            if (cities != null) {
+                weatherAdapter.setCities(cities)
+            }
+        })
+
+        viewModel.cityFetchErrorLiveData.observe(viewLifecycleOwner, {
+            /* To Do */
         })
     }
 

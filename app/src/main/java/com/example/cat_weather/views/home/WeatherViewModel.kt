@@ -4,13 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cat_weather.apis.WeatherApiResponse
-import com.example.cat_weather.models.CityWeatherModel
+import com.example.cat_weather.models.CityData
 import com.example.cat_weather.repositories.WeatherRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,29 +18,49 @@ class WeatherViewModel @Inject constructor(
     private val repository: WeatherRepository
 ): ViewModel() {
 
-    private val _citiesWeatherData = MutableLiveData<WeatherApiResponse>()
-    val citiesWeatherData: LiveData<WeatherApiResponse> get() = _citiesWeatherData
+    private val _citiesLoadingLiveData = MutableLiveData<Boolean>()
+    val citiesLoadingLiveData: LiveData<Boolean> get() = _citiesLoadingLiveData
 
-    fun requestFullWeatherForCities(cities: List<String>) {
+    private val _citiesDataLiveData = MutableLiveData<List<CityData>>()
+    val citiesDataLiveData: LiveData<List<CityData>> get() = _citiesDataLiveData
+
+    private val _cityFetchErrorLiveData = MutableLiveData<String>()
+    val cityFetchErrorLiveData: LiveData<String> get() = _cityFetchErrorLiveData
+
+    fun getWeatherAndImageForCities(cities: List<String>) {
         viewModelScope.launch(Dispatchers.IO) {
-            _citiesWeatherData.postValue(WeatherApiResponse.Loading(true))
+            _citiesLoadingLiveData.postValue(true)
 
-            val data = mutableListOf<CityWeatherModel>()
+            val citiesData = mutableListOf<CityData>()
 
-            cities.forEach { city ->
-                val weatherData = async { repository.getWeatherForCity(city) }
-                val unsplashData = async { repository.getPhotoOfCity(city) }
+            for (city in cities) {
+                val weatherResponse = async { repository.getWeatherByName(city) }
+                val cityImageResponse = async { repository.getCityImage(city) }
 
-                if (weatherData.await().isSuccessful && unsplashData.await().isSuccessful) {
-                    /* Here perform additional check of statuses */
-                    val model = CityWeatherModel(weatherData.await().body()!!, unsplashData.await().body()?.results?.get(0)?.urls?.small!!)
-                        data.add(model)
+                val weatherData = weatherResponse.await()
+                val cityImage = cityImageResponse.await()
+
+                if (weatherData.data != null) {
+                    if (cityImage.data != null) {
+                        val forecastResponse = repository.getForecastByCords(weatherData.data.coord.lat, weatherData.data.coord.lon)
+
+                        if (forecastResponse.data != null) {
+                            Timber.d("City Added")
+                            citiesData.add(CityData(weatherData.data, forecastResponse.data, cityImage.data))
+                        } else {
+                            Timber.d("Cannot get city forecast")
+                        }
+                    } else {
+                        Timber.d("Cannot get city image")
+                    }
                 } else {
-                    _citiesWeatherData.postValue(WeatherApiResponse.Error("Dummy"))
+                    Timber.d("Cannot get city weather")
                 }
             }
 
-            _citiesWeatherData.postValue(WeatherApiResponse.Success(data))
+            _citiesDataLiveData.postValue(citiesData)
+
+            _citiesLoadingLiveData.postValue(false)
         }
     }
 
