@@ -1,7 +1,11 @@
 package com.example.cat_weather.views.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.cat_weather.R
@@ -16,7 +20,7 @@ class WeatherAdapter: RecyclerView.Adapter<WeatherAdapter.WeatherViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {
         val itemBinding = ItemWeatherBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return WeatherViewHolder(itemBinding)
+        return WeatherViewHolder(itemBinding.root, itemBinding)
     }
 
     override fun onBindViewHolder(holder: WeatherViewHolder, position: Int) {
@@ -33,9 +37,28 @@ class WeatherAdapter: RecyclerView.Adapter<WeatherAdapter.WeatherViewHolder>() {
         notifyDataSetChanged()
     }
 
-    class WeatherViewHolder(private val itemBinding: ItemWeatherBinding): RecyclerView.ViewHolder(itemBinding.root) {
+    class WeatherViewHolder(private val itemView: View, private val itemBinding: ItemWeatherBinding): RecyclerView.ViewHolder(itemBinding.root) {
 
+        @SuppressLint("ClickableViewAccessibility")
         fun bind(item: CityData) {
+            itemBinding.rvHourlyForecastRecycler.apply {
+                layoutManager = LinearLayoutManager(
+                    itemView.context, RecyclerView.HORIZONTAL, false
+                )
+                adapter = HourlyForecastAdapter(item.forecastModel.list)
+                setHasFixedSize(true)
+            }
+
+            itemBinding.rvHourlyForecastRecycler.setOnTouchListener { view, event ->
+                if (event.actionMasked == MotionEvent.ACTION_UP) {
+                    itemBinding.root.parent.requestDisallowInterceptTouchEvent(false)
+                }
+                else {
+                    itemBinding.root.parent.requestDisallowInterceptTouchEvent(true)
+                }
+                view.onTouchEvent(event)
+            }
+
             itemBinding.tvCityName.text = item.weatherModel.name
             itemBinding.tvCurrentTemp.text = TemperatureConverter.convertKelvinToCelsius(item.weatherModel.main.temp).toString()
             itemBinding.tvCurrentWeatherDesc.text = item.weatherModel.weather[0].description
@@ -48,8 +71,7 @@ class WeatherAdapter: RecyclerView.Adapter<WeatherAdapter.WeatherViewHolder>() {
                 .error(R.drawable.ic_error)
                 .centerCrop()
                 .into(itemBinding.ivCityImage)
-            }
-
+        }
     }
 
 }

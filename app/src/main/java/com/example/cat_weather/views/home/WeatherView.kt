@@ -77,6 +77,4 @@ class WeatherView : Fragment() {
         return listOf("Szczecin", "Berlin", "Amsterdam")
     }
 
-
-
 }

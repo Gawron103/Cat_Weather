@@ -23,8 +23,8 @@ data class WeatherForecast(
     @SerializedName("clouds")
     val clouds: Clouds,
 
-//    @SerializedName("")
-//    val dt: Long,
+    @SerializedName("dt")
+    val dt: Long,
 
     @SerializedName("main")
     val main: Main,
