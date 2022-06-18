@@ -1,5 +1,6 @@
 package com.example.cat_weather.apis
 
+import com.example.cat_weather.models.airpollutionmodel.AirPollutionModel
 import com.example.cat_weather.models.forecastmodel.ForecastModel
 import com.example.cat_weather.models.weatherbycordsmodel.WeatherByCordsModel
 import com.example.cat_weather.models.weatherbynamemodel.WeatherByNameModel
@@ -29,5 +30,12 @@ interface OpenWeatherApi {
         @Query("exclude") exclude: String,
         @Query("appid") apiKey: String
     ): Response<WeatherByCordsModel>
+
+    @GET("data/2.5/air_pollution")
+    suspend fun getAirPollutionForCords(
+        @Query("lat") lat: Double,
+        @Query("lon") lon: Double,
+        @Query("appid") apiKey: String
+    ) : Response<AirPollutionModel>
 
 }

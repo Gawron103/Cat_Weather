@@ -45,8 +45,15 @@ class WeatherViewModel @Inject constructor(
                         val forecastResponse = repository.getForecastByCords(weatherData.data.coord.lat, weatherData.data.coord.lon)
 
                         if (forecastResponse.data != null) {
-                            Timber.d("City Added")
-                            citiesData.add(CityData(weatherData.data, forecastResponse.data, cityImage.data))
+                            val airPollutionResponse = repository.getAirPollutionForCords(weatherData.data.coord.lat, weatherData.data.coord.lon)
+
+                            if (airPollutionResponse.data != null) {
+                                Timber.d("City Added")
+                                citiesData.add(CityData(weatherData.data, forecastResponse.data, airPollutionResponse.data, cityImage.data))
+                            } else {
+                                Timber.d("Cannot get city air pollution")
+                                Timber.d("Error: ${airPollutionResponse.message}")
+                            }
                         } else {
                             Timber.d("Cannot get city forecast")
                         }

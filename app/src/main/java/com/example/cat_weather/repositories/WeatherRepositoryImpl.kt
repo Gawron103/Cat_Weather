@@ -4,6 +4,7 @@ import com.example.cat_weather.BuildConfig
 import com.example.cat_weather.apis.OpenWeatherApi
 import com.example.cat_weather.apis.ResponseState
 import com.example.cat_weather.apis.UnsplashApi
+import com.example.cat_weather.models.airpollutionmodel.AirPollutionModel
 import com.example.cat_weather.models.forecastmodel.ForecastModel
 import com.example.cat_weather.models.weatherbycordsmodel.WeatherByCordsModel
 import com.example.cat_weather.models.weatherbynamemodel.WeatherByNameModel
@@ -86,6 +87,25 @@ class WeatherRepositoryImpl @Inject constructor(
                 ResponseState.Error(e.message!!)
             } else {
                 ResponseState.Error("Unknown error")
+            }
+        }
+    }
+
+    override suspend fun getAirPollutionForCords(lat: Double, lon: Double): ResponseState<AirPollutionModel?> {
+        return try {
+            val response = openWeatherApi.getAirPollutionForCords(lat, lon, BuildConfig.OPEN_WEATHER_KEY)
+
+            if (response.isSuccessful) {
+                val data = response.body()
+                ResponseState.Success(data)
+            } else {
+                ResponseState.Success(null)
+            }
+        } catch (e: Exception) {
+            if (null != e.message) {
+                ResponseState.Error(e.message!!)
+            } else {
+                ResponseState.Error("TEST")
             }
         }
     }

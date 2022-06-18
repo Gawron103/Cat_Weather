@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.example.cat_weather.R
 import com.example.cat_weather.databinding.ItemWeatherBinding
 import com.example.cat_weather.models.CityData
+import com.example.cat_weather.utils.AirPollutionMapper
 import com.example.cat_weather.utils.TemperatureConverter
 import com.example.cat_weather.utils.TimeConverter
 
@@ -64,6 +65,10 @@ class WeatherAdapter: RecyclerView.Adapter<WeatherAdapter.WeatherViewHolder>() {
             itemBinding.tvCurrentWeatherDesc.text = item.weatherModel.weather[0].description
             itemBinding.tvSunriseValue.text = TimeConverter.convertTime(item.weatherModel.sys.sunrise)
             itemBinding.tvSunsetValue.text = TimeConverter.convertTime(item.weatherModel.sys.sunset)
+
+            itemBinding.tvAirQualityValue.text = AirPollutionMapper.getAirQualityText(
+                item.airPollutionModel.list[0].main.aqi
+            )
 
             Glide
                 .with(itemBinding.ivCityImage)
