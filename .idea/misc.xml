@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/btn_shape.xml" value="0.5354166666666667" />
+        <entry key="app/src/main/res/drawable/drawable_custom_progressbar.xml" value="0.5271794871794871" />
         <entry key="app/src/main/res/drawable/ic_temp.xml" value="0.5271794871794871" />
         <entry key="app/src/main/res/drawable/shape.xml" value="0.3675925925925926" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.5052083333333334" />

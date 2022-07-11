@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import app.futured.donut.DonutSection
 import com.example.cat_weather.R
 import com.example.cat_weather.databinding.ItemWeatherBinding
 import com.example.cat_weather.models.CityData
@@ -61,6 +62,13 @@ class WeatherAdapter: RecyclerView.Adapter<WeatherAdapter.WeatherViewHolder>() {
             itemBinding.tvCurrentTemp.text = itemView.resources.getString(R.string.celsius_sign,TemperatureConverter.convertKelvinToCelsius(item.weatherModel.main.temp))
             itemBinding.tvCurrentWeatherDesc.text = item.weatherModel.weather[0].description
 
+            val sectionData = DonutSection(
+                name = "pollution",
+                color = AirPollutionMapper.getAirQualityDonutColor(item.airPollutionModel.list[0].main.aqi),
+                amount = item.airPollutionModel.list[0].main.aqi.toFloat()
+            )
+            itemBinding.pbAirQualityBar.submitData(listOf(sectionData))
+            itemBinding.tvAirQualityIndex.text = itemView.resources.getString(R.string.air_pollution_index, item.airPollutionModel.list[0].main.aqi)
             itemBinding.tvAirQualityValue.text = AirPollutionMapper.getAirQualityText(
                 item.airPollutionModel.list[0].main.aqi
             )
