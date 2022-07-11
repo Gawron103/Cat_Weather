@@ -2,4 +2,6 @@
     <string name="app_name">Cat_Weather</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="celsius_sign">%d \u2103</string>
+    <string name="air_pollution_index">%d/5</string>
 </resources>
