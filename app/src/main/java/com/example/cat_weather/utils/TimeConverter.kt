@@ -9,4 +9,8 @@ object TimeConverter {
         return SimpleDateFormat("HH:mm aa").format(Date(timestamp.toLong() * 1000))
     }
 
+    fun getDayName(timestamp: Long): String {
+        return SimpleDateFormat("EEEE", Locale.ENGLISH).format(timestamp * 1000)
+    }
+
 }

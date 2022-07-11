@@ -7,15 +7,12 @@ data class ForecastModel(
     @SerializedName("city")
     val city: City,
 
-//    val cnt: Int,
-
     @SerializedName("cod")
     val cod: String,
 
     @SerializedName("list")
     val list: List<WeatherForecast>,
 
-//    val message: Int
 )
 
 data class WeatherForecast(
@@ -39,6 +36,9 @@ data class WeatherForecast(
     val weather: List<Weather>,
 
     @SerializedName("wind")
-    val wind: Wind
+    val wind: Wind,
+
+    @SerializedName("dt_txt")
+    val dt_txt: String
 
 )

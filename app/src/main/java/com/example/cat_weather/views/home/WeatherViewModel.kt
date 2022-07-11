@@ -5,7 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cat_weather.models.CityData
+import com.example.cat_weather.models.forecastmodel.ForecastModel
+import com.example.cat_weather.models.forecastmodel.WeatherForecast
 import com.example.cat_weather.repositories.WeatherRepository
+import com.example.cat_weather.utils.TimeConverter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -49,7 +52,7 @@ class WeatherViewModel @Inject constructor(
 
                             if (airPollutionResponse.data != null) {
                                 Timber.d("City Added")
-                                citiesData.add(CityData(weatherData.data, forecastResponse.data, airPollutionResponse.data, cityImage.data))
+                                citiesData.add(CityData(weatherData.data, groupForecastForDays(forecastResponse.data), airPollutionResponse.data, cityImage.data))
                             } else {
                                 Timber.d("Cannot get city air pollution")
                                 Timber.d("Error: ${airPollutionResponse.message}")
@@ -71,4 +74,9 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
+    private fun groupForecastForDays(forecast: ForecastModel) =
+        forecast.list.groupBy { item ->
+            TimeConverter.getDayName(item.dt)
+        }
+    
 }

@@ -62,12 +62,13 @@
                     android:id="@+id/tv_CurrentTemp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="400dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="128dp"
+                    android:layout_marginEnd="8dp"
                     android:text="TextView"
                     android:textSize="48sp"
-                    app:layout_constraintBottom_toTopOf="@+id/tv_CurrentWeatherDesc"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.1"
+                    app:layout_constraintHorizontal_bias="0.15"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/iv_LocationIcon"
                     app:layout_constraintVertical_chainStyle="spread" />
@@ -76,88 +77,39 @@
                     android:id="@+id/tv_CurrentWeatherDesc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="8dp"
                     android:text="TextView"
                     android:textSize="20sp"
-                    app:layout_constraintBottom_toTopOf="@+id/tv_SunriseLabel"
                     app:layout_constraintEnd_toEndOf="@+id/tv_CurrentTemp"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/tv_CurrentTemp"
                     app:layout_constraintTop_toBottomOf="@+id/tv_CurrentTemp" />
 
-                <TextView
-                    android:id="@+id/tv_SunriseLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
-                    android:text="Sunrise"
-                    app:layout_constraintBottom_toTopOf="@+id/tv_SunsetLabel"
-                    app:layout_constraintEnd_toStartOf="@+id/tv_SunriseValue"
-                    app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_CurrentWeatherDesc" />
-
-                <TextView
-                    android:id="@+id/tv_SunsetLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="32dp"
-                    android:text="Sunset"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/tv_SunsetValue"
-                    app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_SunriseLabel" />
-
-                <TextView
-                    android:id="@+id/tv_SunriseValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:text="SunriseVal"
-                    app:layout_constraintBaseline_toBaselineOf="@+id/tv_SunriseLabel"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/tv_SunriseLabel" />
-
-                <TextView
-                    android:id="@+id/tv_SunsetValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:text="SunsetVal"
-                    app:layout_constraintBaseline_toBaselineOf="@+id/tv_SunsetLabel"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/tv_SunsetLabel" />
-
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_HourlyForecastRecycler"
-                    android:layout_width="match_parent"
+                    android:id="@+id/rv_Forecast"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="32dp"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="32dp"
-                    android:scrollbars="horizontal|vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:nestedScrollingEnabled="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_SunsetLabel" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_CurrentWeatherDesc" />
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView"
                     android:layout_width="0dp"
                     android:layout_height="100dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="32dp"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="32dp"
+                    android:layout_marginBottom="24dp"
                     app:cardCornerRadius="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/rv_HourlyForecastRecycler">
+                    app:layout_constraintTop_toBottomOf="@+id/rv_Forecast">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"

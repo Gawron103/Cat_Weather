@@ -7,13 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.cat_weather.R
 import com.example.cat_weather.databinding.ItemWeatherBinding
 import com.example.cat_weather.models.CityData
 import com.example.cat_weather.utils.AirPollutionMapper
 import com.example.cat_weather.utils.TemperatureConverter
-import com.example.cat_weather.utils.TimeConverter
 
 class WeatherAdapter: RecyclerView.Adapter<WeatherAdapter.WeatherViewHolder>() {
 
@@ -42,15 +40,14 @@ class WeatherAdapter: RecyclerView.Adapter<WeatherAdapter.WeatherViewHolder>() {
 
         @SuppressLint("ClickableViewAccessibility")
         fun bind(item: CityData) {
-            itemBinding.rvHourlyForecastRecycler.apply {
+            itemBinding.rvForecast.apply {
                 layoutManager = LinearLayoutManager(
-                    itemView.context, RecyclerView.HORIZONTAL, false
+                    itemView.context, RecyclerView.VERTICAL, false
                 )
-                adapter = HourlyForecastAdapter(item.forecastModel.list)
+                adapter = ForecastAdapter(item.forecastModel)
                 setHasFixedSize(true)
             }
-
-            itemBinding.rvHourlyForecastRecycler.setOnTouchListener { view, event ->
+            itemBinding.rvForecast.setOnTouchListener { view, event ->
                 if (event.actionMasked == MotionEvent.ACTION_UP) {
                     itemBinding.root.parent.requestDisallowInterceptTouchEvent(false)
                 }
@@ -61,21 +58,12 @@ class WeatherAdapter: RecyclerView.Adapter<WeatherAdapter.WeatherViewHolder>() {
             }
 
             itemBinding.tvCityName.text = item.weatherModel.name
-            itemBinding.tvCurrentTemp.text = TemperatureConverter.convertKelvinToCelsius(item.weatherModel.main.temp).toString()
+            itemBinding.tvCurrentTemp.text = itemView.resources.getString(R.string.celsius_sign,TemperatureConverter.convertKelvinToCelsius(item.weatherModel.main.temp))
             itemBinding.tvCurrentWeatherDesc.text = item.weatherModel.weather[0].description
-            itemBinding.tvSunriseValue.text = TimeConverter.convertTime(item.weatherModel.sys.sunrise)
-            itemBinding.tvSunsetValue.text = TimeConverter.convertTime(item.weatherModel.sys.sunset)
 
             itemBinding.tvAirQualityValue.text = AirPollutionMapper.getAirQualityText(
                 item.airPollutionModel.list[0].main.aqi
             )
-
-            Glide
-                .with(itemBinding.ivCityImage)
-                .load(item.cityImg)
-                .error(R.drawable.ic_error)
-                .centerCrop()
-                .into(itemBinding.ivCityImage)
         }
     }
 
